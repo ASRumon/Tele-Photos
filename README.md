@@ -119,6 +119,7 @@ These are stored in the **Downloads** folder on Android.
 ## 💬 Feedback
 
 Found a bug or have a feature request?
+Reach out to me on Telegram: [@Randomrumon](https://t.me/Randomrumon)
 
 ---
 
