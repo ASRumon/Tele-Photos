@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TG Photo Backup</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="https://i.postimg.cc/43YZZ70R/presplash.png" type="image/png" />
+</head>
+<body class="bg-gray-100 text-gray-700 font-sans">
+
+  <header class="bg-white shadow-md p-6 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <img src="https://i.postimg.cc/43YZZ70R/presplash.png" class="h-12 w-12" alt="App Logo" />
+      <h1 class="text-3xl font-extrabold text-blue-700">TG Photo Backup</h1>
+    </div>
+    <a href="https://t.me/Randomrumon" class="text-blue-600 hover:underline font-medium">Contact Me</a>
+  </header>
+
+  <main class="max-w-5xl mx-auto py-12 px-6 space-y-10">
+
+    <section class="bg-white rounded-lg shadow-md p-8">
+      <h2 class="text-2xl font-bold mb-4 text-blue-800">What is this?</h2>
+      <p class="text-gray-800 leading-relaxed">
+        <strong>TG Photo Backup</strong> is a lightweight, open-source alternative to Google Photos. It uses your own Telegram bot to send photos directly to your Telegram chat — both in compressed and original quality.
+      </p>
+    </section>
+
+    <section class="bg-white rounded-lg shadow-md p-8">
+      <h2 class="text-2xl font-bold mb-4 text-blue-800">Features</h2>
+      <ul class="list-disc list-inside space-y-2 text-gray-800">
+        <li>Unlimited photo backup via Telegram</li>
+        <li>Supports photos up to 50MB</li>
+        <li>Only syncs new or unbacked photos</li>
+        <li>Supports multiple folder paths</li>
+        <li>Backs up settings and photo metadata</li>
+      </ul>
+    </section>
+
+    <section class="bg-white rounded-lg shadow-md p-8">
+      <h2 class="text-2xl font-bold mb-4 text-blue-800">How to Use</h2>
+      <ol class="list-decimal list-inside space-y-2 text-gray-800">
+        <li>Install the APK on your Android phone</li>
+        <li>Manually grant file and media permissions</li>
+        <li>Configure your Bot API key and Chat ID in the app</li>
+        <li>Set folder paths to include/exclude</li>
+        <li>Use the Backup or Sync option to upload</li>
+      </ol>
+    </section>
+
+    <section class="bg-white rounded-lg shadow-md p-8">
+      <h2 class="text-2xl font-bold mb-4 text-blue-800">Telegram Bot Setup</h2>
+      <p class="text-gray-800 mb-2">1. Create a bot using <a href="https://t.me/BotFather" class="text-blue-600 hover:underline">@BotFather</a></p>
+      <p class="text-gray-800 mb-2">2. Get your Telegram user ID from <a href="https://t.me/Check_Telegram_IDBot" class="text-blue-600 hover:underline">@Check_Telegram_IDBot</a></p>
+      <p class="text-gray-800">3. Add both to the app settings</p>
+    </section>
+
+    <section class="bg-white rounded-lg shadow-md p-8">
+      <h2 class="text-2xl font-bold mb-4 text-red-600">Notes</h2>
+      <ul class="list-disc list-inside space-y-2 text-red-700">
+        <li>This is my first release. Expect bugs.</li>
+        <li>It's written in Python, so it’s not well optimized for Android.</li>
+        <li>Image preview is laggy — that’s normal right now.</li>
+        <li>If it feels slow, you’re right — nothing I can do for now 😅</li>
+        <li>No bug fixes are planned for this version.</li>
+        <li>I'm learning a better language to rebuild this properly later.</li>
+      </ul>
+    </section>
+
+    <section class="bg-white rounded-lg shadow-md p-8">
+      <h2 class="text-2xl font-bold mb-6 text-blue-800">Screenshots</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <img src="https://i.postimg.cc/G2jDC5Nf/Screenshot-2025-06-26-23-34-37-30-39080cc9adfddaef501cc385736d2aa1-1.jpg" alt="Screenshot 1" class="rounded shadow" />
+        <img src="https://i.postimg.cc/sxDhDJCg/Screenshot-2025-06-26-23-34-42-00-39080cc9adfddaef501cc385736d2aa1-1.jpg" alt="Screenshot 2" class="rounded shadow" />
+        <img src="https://i.postimg.cc/m2kHvVSd/Screenshot-2025-06-26-23-34-50-43-39080cc9adfddaef501cc385736d2aa1-1.jpg" alt="Screenshot 3" class="rounded shadow" />
+        <img src="https://i.postimg.cc/Gt7sBsbJ/Screenshot-2025-06-26-23-35-01-99-39080cc9adfddaef501cc385736d2aa1-1.jpg" alt="Screenshot 4" class="rounded shadow" />
+        <img src="https://i.postimg.cc/YqPWMgnt/Screenshot-2025-06-26-23-35-19-45-39080cc9adfddaef501cc385736d2aa1.jpg" alt="Screenshot 5" class="rounded shadow" />
+        <img src="https://i.postimg.cc/9QqqMMKZ/Screenshot-2025-06-26-23-35-47-61-39080cc9adfddaef501cc385736d2aa1.jpg" alt="Screenshot 6" class="rounded shadow" />
+        <img src="https://i.postimg.cc/Zqtvymzg/Screenshot-2025-06-26-23-36-03-06-39080cc9adfddaef501cc385736d2aa1.jpg" alt="Screenshot 7" class="rounded shadow" />
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-white border-t border-gray-300 py-6 text-center text-gray-600 text-sm">
+    &copy; <span id="year"></span> Made with ❤️ by <a href="https://t.me/Randomrumon" class="text-blue-600 hover:underline">Randomrumon</a>
+  </footer>
+
+  <script>
+    // Set current year dynamically
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+  
+</body>
+</html>
