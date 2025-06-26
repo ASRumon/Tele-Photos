@@ -1,0 +1,389 @@
+#:import dp kivy.metrics.dp
+#:import rgba kivy.utils.get_color_from_hex
+
+<GalleryScreen>:
+    FloatLayout:
+        BoxLayout:
+            orientation: 'vertical'
+            padding: dp(16)
+            spacing: dp(12)
+            size_hint: 1, 1
+            
+
+            BoxLayout:
+                size_hint_y: None
+                height: dp(56)
+                spacing: dp(12)
+                Button:
+                    text: 'Overlay'
+                    background_color: rgba("#A53860")
+                    color: rgba("#FFFFFF")
+                    bold: True
+                    on_release: root.show_black_overlay()
+                    font_size: '12sp' 
+
+                Button:
+                    text: 'Sync Now'
+                    background_color: rgba("#A53860")
+                    color: rgba("#FFFFFF")
+                    bold: True
+                    font_size: '12sp'  # Smaller font size
+                    text_size: self.size  # Enables wrapping
+                    halign: 'center'  # Horizontal alignment
+                    valign: 'middle'  # Vertical alignment
+                    on_release: root.sync_now()
+
+                Button:
+                    text: 'Backup Selected'
+                    background_color: rgba("#A53860")
+                    color: rgba("#FFFFFF")
+                    bold: True
+                    font_size: '12sp'  # Smaller font size
+                    text_size: self.size  # Enables wrapping
+                    halign: 'center'  # Horizontal alignment
+                    valign: 'middle'  # Vertical alignment
+                    on_release: root.backup_selected()
+
+
+                Button:
+                    text: 'Settings'
+                    background_color: rgba("#A53860")
+                    color: rgba("#FFFFFF")
+                    bold: True
+                    on_release: root.open_settings()
+                    font_size: '12sp' 
+
+            Label:
+                id: status_label
+                text: ''
+                bold: True
+                font_size: '12sp'
+                size_hint_y: None
+                height: self.texture_size[1] + dp(10)  # Dynamically adjust to content with padding
+                text_size: self.width, None
+                halign: 'center'
+                color: rgba("#FFFFFF")
+
+
+            ImageRecycleView:
+                id: rv
+                viewclass: 'SelectableImage'
+                RecycleGridLayout:
+                    cols: 3
+                    default_size: None, dp(160)
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    spacing: dp(8)
+                    padding: dp(4)
+                    height: self.minimum_height
+
+        Widget:
+            id: inactivity_overlay
+            size: self.parent.size if self.parent else (0, 0)
+            pos: self.parent.pos if self.parent else (0, 0)
+            canvas:
+                Color:
+                    rgba: 0, 0, 0, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            opacity: 0  # Hidden by default
+
+<SelectableImage@BoxLayout>:
+    orientation: 'vertical'
+    size_hint_y: None
+    height: dp(250)
+    padding: dp(6)
+    spacing: dp(4)
+    canvas.before:
+        Color:
+            rgba: rgba("#3A0519")
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [12]
+
+    path: ''
+    source: ''
+    status: 'pending'
+
+    AsyncImage:
+        source: root.source
+        allow_stretch: True
+        keep_ratio: True
+        size_hint_y: 0.5
+        on_touch_down:
+            if self.collide_point(*args[1].pos): app.sm.get_screen('preview').set_images([d['path'] for d in app.sm.get_screen('gallery').ids.rv.data], [d['path'] for d in app.sm.get_screen('gallery').ids.rv.data].index(root.path)); app.sm.current = 'preview'
+
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_y: 0.5
+        spacing: dp(6)
+        CheckBox:
+            active: root.path in app.sm.get_screen('gallery').selected
+            on_active: app.sm.get_screen('gallery').toggle_select(root.path, self, self.active)
+
+        Label:
+            text: (    '[Uploading]' if root.status == 'uploading' else     '[Uploaded]' if root.status == 'uploaded' else    '[Failed]' if root.status == 'failed' else    '[Pending]')
+            markup: True
+            font_size: '12sp'
+            color: rgba("#EF88AD")
+        
+        Label:
+            text: root.note
+            font_size: '10sp'
+            color: rgba("#F7374F")  
+            opacity: 1 if root.note else 0
+
+
+<PreviewScreen>:
+    BoxLayout:
+        orientation: 'vertical'  # <-- Important to stack vertically
+        padding: dp(10)
+        spacing: dp(10)
+
+        Image:
+            id: img
+            allow_stretch: True
+            keep_ratio: True
+            size_hint_y: 1  # Expand to fill available space
+            on_touch_down:
+                if args[1].x > self.width * 0.75: root.swipe_left()
+                elif args[1].x < self.width * 0.25: root.swipe_right()
+
+        Label:
+            text: root.current_path
+            font_size: '12sp'
+            color: rgba("#FFFFFF")
+            size_hint_y: None
+            height: self.texture_size[1] + dp(8)
+            text_size: self.width, None
+            halign: 'center'
+            valign: 'middle'
+
+        Button:
+            text: 'Back'
+            size_hint_y: None
+            height: dp(50)
+            background_color: rgba("#3A0519")
+            color: rgba("#FFFFFF")
+            bold: True
+            font_size: '15sp'  # Smaller font size
+            text_size: self.size  # Enables wrapping
+            halign: 'center'  # Horizontal alignment
+            valign: 'middle'  # Vertical alignment
+            on_release: app.sm.current = 'gallery'
+
+        Button:
+            text: 'Backup Now'
+            size_hint_y: None
+            height: dp(50)
+            background_color: rgba("#3A0519")
+            color: rgba("#FFFFFF")
+            bold: True
+            font_size: '15sp'  # Smaller font size
+            text_size: self.size  # Enables wrapping
+            halign: 'center'  # Horizontal alignment
+            valign: 'middle'  # Vertical alignment
+            on_release: root.backup_now()
+
+
+<SettingsScreen>:
+    ScrollView:
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            height: self.minimum_height
+            padding: dp(20)
+            spacing: dp(14)
+
+            TextInput:
+                id: token_input
+                hint_text: 'Bot Token'
+                multiline: False
+                size_hint_y: None
+                height: dp(50)
+                padding: dp(10)
+                password: False
+                input_type: 'text'
+
+            TextInput:
+                id: chat_id_input
+                hint_text: 'Chat ID'
+                multiline: False
+                size_hint_y: None
+                height: dp(50)
+                padding: dp(10)
+                password: False
+                input_type: 'text'
+
+            TextInput:
+                id: auto_input
+                hint_text: 'Auto-sync interval (mins)'
+                input_filter: 'int'
+                multiline: False
+                size_hint_y: None
+                height: dp(50)
+                padding: dp(10)
+                password: False
+                input_type: 'text'
+
+            TextInput:
+                id: exclude_input
+                hint_text: 'Exclude folder paths (comma-separated)'
+                multiline: True
+                size_hint_y: None
+                height: dp(100)
+                padding: dp(10)
+                password: False
+                input_type: 'text'
+
+            TextInput:
+                id: include_input
+                hint_text: "Include folders (comma-separated)"
+                multiline: True
+                size_hint_y: None
+                height: dp(100)
+                padding: dp(10)
+                password: False
+                input_type: 'text'
+
+
+            Button:
+                text: 'Paste'
+                size_hint_y: None
+                height: dp(50)
+                on_release: root.paste_to_focused()
+
+            BoxLayout:
+                size_hint_y: None
+                height: dp(40)
+                spacing: dp(10)
+                Label:
+                    text: 'Only sync on Wi-Fi'
+                    size_hint_x: 0.8
+                    color: rgba("#555555")
+                CheckBox:
+                    id: wifi_checkbox
+                    size_hint_x: 0.2
+
+            BoxLayout:
+                size_hint_y: None
+                height: dp(40)
+                spacing: dp(10)
+                Label:
+                    text: 'Scan subfolders'
+                    size_hint_x: 0.8
+                    color: rgba("#555555")
+                CheckBox:
+                    id: subfolder_checkbox
+                    size_hint_x: 0.2
+
+            Button:
+                text: 'Save Settings'
+                size_hint_y: None
+                height: dp(50)
+                background_color: rgba("#3A0519")
+                color: rgba("#FFFFFF")
+                bold: True
+                font_size: '15sp'  # Smaller font size
+                text_size: self.size  # Enables wrapping
+                halign: 'center'  # Horizontal alignment
+                valign: 'middle'  # Vertical alignment
+                on_release: root.save_settings()
+
+            Button:
+                text: 'Back'
+                size_hint_y: None
+                height: dp(50)
+                background_color: rgba("#3A0519")
+                color: rgba("#FFFFFF")
+                bold: True
+                font_size: '15sp'  # Smaller font size
+                text_size: self.size  # Enables wrapping
+                halign: 'center'  # Horizontal alignment
+                valign: 'middle'  # Vertical alignment
+                on_release: app.sm.current = 'gallery'
+
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: dp(50)
+                spacing: dp(10)
+                Button:
+                    text: 'Backup Database'
+                    on_release: root.backup_database()
+                Button:
+                    text: 'Restore Database'
+                    on_release: root.restore_database()
+
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: dp(50)
+                spacing: dp(10)
+                Button:
+                    text: 'Backup Settings'
+                    on_release: root.backup_settings()
+                Button:
+                    text: 'Restore Settings'
+                    on_release: root.restore_settings()
+
+
+<ThumbnailProgressOverlay>:
+    size_hint: 0.7, 0.2
+    auto_dismiss: False
+    background_color: 0, 0, 0, 0.7
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        spacing: 10
+        Label:
+            id: progress_label
+            text: "Creating thumbnails, please wait...{} / {}".format(root.current, root.total)
+            size_hint_y: None
+            text_size: self.size
+            halign: 'center'
+            valign: 'middle'
+        ProgressBar:
+            id: progress_bar
+            max: root.total
+            value: root.current
+            size_hint_y: 0.5
+
+<UploadProgressOverlay>:
+    size_hint: 0.7, 0.25
+    auto_dismiss: False
+    background_color: 0, 0, 0, 0.7
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        spacing: 10
+        Label:
+            id: upload_progress_label
+            text: "Uploading images...{} / {}".format(root.current, root.total)
+            size_hint_y: None
+            text_size: self.size
+            halign: 'center'
+            valign: 'middle'
+        Label:
+            id: upload_summary_label
+            text: root.summary
+            size_hint_y: None
+            text_size: self.size
+            halign: 'center'
+            valign: 'middle'
+            font_size: '12sp'
+            color: 1, 1, 1, 1
+        ProgressBar:
+            id: upload_progress_bar
+            max: root.total
+            value: root.current
+            size_hint_y: 0.5
+        Button:
+            text: "Cancel"
+            size_hint_y: None
+            height: dp(40)
+            background_color: rgba("#F7374F")
+            color: 1, 1, 1, 1
+            on_release: root.cancel_upload()
