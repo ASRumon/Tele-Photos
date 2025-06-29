@@ -1,6 +1,6 @@
 # 📸 TG Photo Backup
 
-![App Logo](https://i.postimg.cc/C1TXR9BL/image-7-1.png)
+![App Logo](https://i.postimg.cc/zfm07KJx/image-7-2.png)
 
 **TG Photo Backup** is a lightweight, open-source alternative to Google Photos — with a twist: it offers **unlimited photo storage** by leveraging **Telegram bots** to back up your images.
 
